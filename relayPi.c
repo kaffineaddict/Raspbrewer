@@ -1,3 +1,10 @@
+/* 
+ * File:   relayPi.c
+ * Author: Blake Sutton
+ * Email: blasutto@uat.edu
+ *
+ * Created on March 11, 2015, 8:57 PM
+ */
 #include <wiringPi.h>
 #include <stdio.h>
 

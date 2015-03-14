@@ -12,7 +12,6 @@
 extern "C" {
 #endif
 
-extern void relayPrint(void);
 extern int initBrew(void);
 extern void initRelay(int);
 
