@@ -1,10 +1,12 @@
 /* 
  * File:   relayPi.h
- * Author: KaffineAddict
+ * Project: Raspbrewer
+ * Author: Blake Sutton
+ * Email: blasutto@uat.edu
  *
  * Created on March 11, 2015, 8:57 PM
+ * Last Updated: 3/17/2015
  */
-
 #ifndef RELAYPI_H
 #define	RELAYPI_H
 
@@ -20,4 +22,3 @@ extern void initRelay(int);
 #endif
 
 #endif	/* RELAYPI_H */
-

@@ -1,9 +1,11 @@
 /* 
  * File:   relayPi.c
+ * Project: Raspbrewer
  * Author: Blake Sutton
  * Email: blasutto@uat.edu
  *
  * Created on March 11, 2015, 8:57 PM
+ * Last Updated: 3/17/2015
  */
 #include <wiringPi.h>
 #include <stdio.h>

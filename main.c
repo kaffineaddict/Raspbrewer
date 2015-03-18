@@ -1,9 +1,11 @@
 /* 
  * File:   main.c
+ * Project: Raspbrewer
  * Author: Blake Sutton
  * Email: blasutto@uat.edu
  *
  * Created on March 9, 2015, 9:07 PM
+ * Last Updated: 3/17/2015
  */
 
 #include <stdio.h>
