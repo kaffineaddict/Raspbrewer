@@ -38,6 +38,8 @@ int main(int argc, char** argv) {
     relay.initRelay("Port3", relay_3);
     relay.initRelay("Port4", relay_4);
     temp.registerSensor("main_brew", "28-00000655b53a");
+    temp.registerSensor("second_brew", "28-00000657dc06");
     temp.readTemp("main_brew");
+    temp.readTemp("second_brew");
     return 0;
 }
