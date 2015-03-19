@@ -13,7 +13,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <wiringPi.h>
-#include <stdio.h>
+#include <iostream>
+#include <map>
 
 #ifndef RELAYPI_H
 #define	RELAYPI_H
@@ -25,10 +26,13 @@ public:
     virtual ~RelayPi();
     
     bool initBrew(void);
-    void initRelay(int);
+    void initRelay(std::string, int);
     void updateRelay(int, bool);
+    void updateRelay(std::string, bool);
 private:
-
+    bool RELAYPI_ON;
+    bool RELAYPI_OFF;
+    std::map<std::string, int> relays;
 };
 
 #endif	/* RELAYPI_H */

@@ -13,6 +13,9 @@ TempPi::TempPi() {
     // Run two system commands to initialize the temperature sensors
     system("sudo modeprobe w1-gpio");
     system("sudo modeprobe w1-therm");
+    
+    path = "/sys/bus/w1/devices/";
+    extension = "/w1_slave";
 }
 
 TempPi::TempPi(const TempPi& orig) {
@@ -21,6 +24,35 @@ TempPi::TempPi(const TempPi& orig) {
 TempPi::~TempPi() {
 }
 
-TempPi::registerSensor(String id) {
+void TempPi::registerSensor(std::string name, std::string id) {
+    sensors[name] = id;
+    std::cout << "Registration of the sensor " << name << " was successful." << std::endl;
+}
+
+void TempPi::readTemp(std::string name) {
+    std::ifstream file;
+    std::string filename = path + sensors[name] + extension;
+    std::string reading;
     
+    file.open(filename.c_str());
+    if(file.is_open()){
+        while(!file.eof()) {
+            reading.push_back(file.get());
+        }
+        file.close();        
+    } else {
+        std::cout << "Could not read from the sensor!" << std::endl;
+    }
+    int temp = atoi(reading.substr(reading.find("t=") + 2, reading.length()).c_str());
+    
+    std::cout << toCelsius(temp) << std::endl;
+    std::cout << toFahrenheit(temp) << std::endl;
+}
+
+float TempPi::toCelsius(int temp) {
+    return temp / 1000;
+}
+
+float TempPi::toFahrenheit(int temp) {
+    return toCelsius(temp) * 9 / 5 + 32;
 }

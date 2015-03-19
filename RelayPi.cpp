@@ -15,6 +15,8 @@
 #include "RelayPi.h"
 
 RelayPi::RelayPi() {
+    RELAYPI_ON = true;
+    RELAYPI_OFF = false;
 }
 
 RelayPi::RelayPi(const RelayPi& orig) {
@@ -25,21 +27,40 @@ RelayPi::~RelayPi() {
 
 bool RelayPi::initBrew(void) {
     if (wiringPiSetup() == -1) {
-        printf("setup wiringPi failed !\n");
+        std::cout << "Setup of wiringPi failed !" << std::endl;
         return true;
     }
     return false;
 }
 
-void RelayPi::initRelay(int pin) {
-    printf("Setting up relay pin on wiringPi pin: %d\n", pin);
-    pinMode(pin, OUTPUT);
+void RelayPi::initRelay(std::string name, int pin) {
+    std::cout << "Setting up " << name << " relay on wiringPi pin: " << pin << std::endl;
+    pinMode(pin, OUTPUT); // wiringPi pin method to change GPIO state
+    relays[name] = pin;
 }
 
+/**
+ * This function is used to switch the relay on and off.
+ * Activate a relay using true and deactivate with false.
+ * 
+ * @param pin The wiringPi pin number to talk through.
+ * @param state The desired state of the relay (RELAYPI_ON, RELAYPI_OFF)
+ */
 void RelayPi::updateRelay(int pin, bool state) {
     if(state) {
-        digitalWrite(pin, HIGH);
+        digitalWrite(pin, LOW); // low activates the relay
     } else {
-        digitalWrite(pin, LOW); 
+        digitalWrite(pin, HIGH); 
     }
+}
+
+/**
+ * Allows us to activate a relay by name.
+ * 
+ * @param name The assigned name for the relay
+ * @param state The desired state of the relay (RELAYPI_ON, RELAYPI_OFF)
+ */
+void RelayPi::updateRelay(std::string name, bool state) {
+    int pin = relays[name];
+    return updateRelay(pin, state);
 }

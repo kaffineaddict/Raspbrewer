@@ -14,7 +14,7 @@
 
 #include <iostream>
 #include "RelayPi.h"
-#include <unistd.h>
+#include "TempPi.h"
 
 using namespace std;
 
@@ -22,21 +22,22 @@ int relay_1 = 0; // pin 11
 int relay_2 = 1; // pin 12
 int relay_3 = 2; // pin 13
 int relay_4 = 3; // pin 15
+std::string sensor1 = "28-00000655b53a";
 
 /*
  * 
  */
 int main(int argc, char** argv) {
     RelayPi relay;
+    TempPi temp;
+    
     relay.initBrew();
     cout << "The relay has been activated. Initializing..." << endl;
-    relay.initRelay(relay_1);
-    relay.initRelay(relay_2);
-    relay.initRelay(relay_3);
-    relay.initRelay(relay_4);
-    usleep(10000 * 1000);
-    relay.updateRelay(relay_1, true);
-    usleep(10000 * 1000);
-    relay.updateRelay(relay_1, false);
+    relay.initRelay("Port1", relay_1);
+    relay.initRelay("Port2", relay_2);
+    relay.initRelay("Port3", relay_3);
+    relay.initRelay("Port4", relay_4);
+    temp.registerSensor("main_brew", "28-00000655b53a");
+    temp.readTemp("main_brew");
     return 0;
 }
