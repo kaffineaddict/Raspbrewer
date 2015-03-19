@@ -18,10 +18,10 @@
 
 using namespace std;
 
-int relay_1 = 0;
-int relay_2 = 1;
-int relay_3 = 2;
-int relay_4 = 3;
+int relay_1 = 0; // pin 11
+int relay_2 = 1; // pin 12
+int relay_3 = 2; // pin 13
+int relay_4 = 3; // pin 15
 
 /*
  * 
