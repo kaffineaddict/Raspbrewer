@@ -5,7 +5,12 @@
  * Email: blasutto@uat.edu
  *
  * Created on March 18, 2015, 6:55 PM
+ * Last Updated: 3/18/2015
  */
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "TempPi.h"
 
