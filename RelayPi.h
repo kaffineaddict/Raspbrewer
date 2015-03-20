@@ -29,9 +29,10 @@ public:
     void initRelay(std::string, int);
     void updateRelay(int, bool);
     void updateRelay(std::string, bool);
-private:
+    
     bool RELAYPI_ON;
     bool RELAYPI_OFF;
+private:
     std::map<std::string, int> relays;
 };
 

@@ -37,9 +37,27 @@ int main(int argc, char** argv) {
     relay.initRelay("Port2", relay_2);
     relay.initRelay("Port3", relay_3);
     relay.initRelay("Port4", relay_4);
+    relay.updateRelay(relay_1, relay.RELAYPI_ON);
+    delay(500);
+    relay.updateRelay(relay_2, relay.RELAYPI_ON);
+    delay(500);
+    relay.updateRelay(relay_3, relay.RELAYPI_ON);
+    delay(500);
+    relay.updateRelay(relay_4, relay.RELAYPI_ON);
+    delay(500);
+    relay.updateRelay(relay_1, relay.RELAYPI_OFF);
+    delay(500);
+    relay.updateRelay(relay_2, relay.RELAYPI_OFF);
+    delay(500);
+    relay.updateRelay(relay_3, relay.RELAYPI_OFF);
+    delay(500);
+    relay.updateRelay(relay_4, relay.RELAYPI_OFF);
+    delay(500);
+    /**
     temp.registerSensor("main_brew", "28-00000655b53a");
     temp.registerSensor("second_brew", "28-00000657dc06");
     temp.readTemp("main_brew");
     temp.readTemp("second_brew");
+     * */
     return 0;
 }
