@@ -5,7 +5,7 @@
  * Email: blasutto@uat.edu
  *
  * Created on March 17, 2015, 7:41 PM
- * Last Updated: 3/18/2015
+ * Last Updated: 3/23/2015
  */
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -30,9 +30,11 @@ public:
     void updateRelay(int, bool);
     void updateRelay(std::string, bool);
     
+    // static flags for relays
     bool RELAYPI_ON;
     bool RELAYPI_OFF;
 private:
+    // a private list of the relays and a name to access them
     std::map<std::string, int> relays;
 };
 

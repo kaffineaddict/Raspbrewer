@@ -5,7 +5,7 @@
  * Email: blasutto@uat.edu
  *
  * Created on March 17, 2015, 7:41 PM
- * Last Updated: 3/18/2015
+ * Last Updated: 3/23/2015
  */
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,6 +14,9 @@
 
 #include "RelayPi.h"
 
+/**
+ * A constructor with initialization of the two relay flags.
+ */
 RelayPi::RelayPi() {
     RELAYPI_ON = true;
     RELAYPI_OFF = false;
@@ -22,10 +25,20 @@ RelayPi::RelayPi() {
 RelayPi::RelayPi(const RelayPi& orig) {
 }
 
+/**
+ * Unused destructor at this time.
+ */
 RelayPi::~RelayPi() {
 }
 
+/**
+ * Starts up the relay module and initializes the Raspberry Pi's GPIO
+ * ports for use by the program.
+ * 
+ * @return True upon successful setup and false upon error.
+ */
 bool RelayPi::initBrew(void) {
+    // call the wiring pi setup function
     if (wiringPiSetup() == -1) {
         std::cout << "Setup of wiringPi failed !" << std::endl;
         return true;
@@ -33,6 +46,11 @@ bool RelayPi::initBrew(void) {
     return false;
 }
 
+/**
+ * Initialize a relay with a human readable name.
+ * @param name A string name for the relay that can be used to update it.
+ * @param pin The WiringPi number of the pin we want to use.
+ */
 void RelayPi::initRelay(std::string name, int pin) {
     std::cout << "Setting up " << name << " relay on wiringPi pin: " << pin << std::endl;
     pinMode(pin, OUTPUT); // wiringPi pin method to change GPIO state
