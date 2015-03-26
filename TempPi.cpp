@@ -5,7 +5,7 @@
  * Email: blasutto@uat.edu
  *
  * Created on March 18, 2015, 6:55 PM
- * Last Updated: 3/18/2015
+ * Last Updated: 3/25/2015
  */
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -34,7 +34,7 @@ void TempPi::registerSensor(std::string name, std::string id) {
     std::cout << "Registration of the sensor " << name << " was successful." << std::endl;
 }
 
-void TempPi::readTemp(std::string name) {
+float TempPi::readTemp(std::string name) {
     std::ifstream file;
     std::string filename = path + sensors[name] + extension;
     std::string reading;
@@ -49,9 +49,8 @@ void TempPi::readTemp(std::string name) {
         std::cout << "Could not read from the sensor!" << std::endl;
     }
     int temp = atoi(reading.substr(reading.find("t=") + 2, reading.length()).c_str());
-    
-    std::cout << toCelsius(temp) << std::endl;
-    std::cout << toFahrenheit(temp) << std::endl;
+
+    return toFahrenheit(temp);
 }
 
 float TempPi::toCelsius(int temp) {

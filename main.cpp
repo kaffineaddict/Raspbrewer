@@ -25,6 +25,7 @@ int relay_2 = 1; // pin 12
 int relay_3 = 2; // pin 13
 int relay_4 = 3; // pin 15
 std::string sensor1 = "28-00000655b53a";
+std::string beer_name = "Cream Ale";
 
 void buildScreen(int, int);
 /*
@@ -35,19 +36,27 @@ int main(int argc, char** argv) {
     TempPi temp;
     bool running = true;
     int count = 0;
-    char mesg[]="Just a string";		/* message to be appeared on the screen */
+    float main_temp = 0;
+    float next_temp = 0;
     int row,col;				/* to store the number of rows and *
                                                 /* the number of colums of the screen */
     initscr();                                  /* start the curses mode */
     getmaxyx(stdscr,row,col);                   /* get the number of rows and columns */
-    //mvprintw(row/2,(col-strlen(mesg))/2,"%s",mesg);
+    
+    temp.registerSensor("main_brew", "28-00000655b53a");
+    temp.registerSensor("next_brew", "28-00000657dc06");
+    
     buildScreen(row, col);
     while(running)
-    {
-        mvprintw(LINES - 1, 0, "Frame: %d", count);
+    {   
+        count++;
+        main_temp = temp.readTemp("main_brew");
+        next_temp = temp.readTemp("next_brew");
+        mvprintw(LINES - 1, 0, "Frame: %d", count);     
+        mvprintw(LINES - 2, col - 18, "Main Temp: %4.2f", main_temp);
+        mvprintw(LINES - 1, col - 18, "Next Temp: %4.2f", next_temp);
         refresh();
         delay(250);
-        count++;
     }
     /**
     relay.initBrew();
@@ -65,5 +74,6 @@ int main(int argc, char** argv) {
 void buildScreen(int rows, int cols)
 {
     std::string bar = std::string(cols, '=');
-    mvprintw(LINES - 3, 0, "%s", bar);
+    mvprintw(LINES - 2, 0, "Brewing: %s", beer_name.c_str());
+    mvprintw(LINES - 3, 0, "%s", bar.c_str());
 }

@@ -5,7 +5,7 @@
  * Email: blasutto@uat.edu
  *
  * Created on March 18, 2015, 6:55 PM
- * Last Updated: 3/18/2015
+ * Last Updated: 3/25/2015
  */
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -29,7 +29,7 @@ public:
     virtual ~TempPi();
     
     void registerSensor(std::string, std::string);
-    void readTemp(std::string);
+    float readTemp(std::string);
 private:
     float toCelsius(int temp);
     float toFahrenheit(int temp);
