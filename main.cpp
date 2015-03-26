@@ -5,7 +5,7 @@
  * Email: blasutto@uat.edu
  *
  * Created on March 9, 2015, 9:07 PM
- * Last Updated: 3/18/2015
+ * Last Updated: 3/25/2015
  */
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -13,6 +13,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <iostream>
+#include <string.h>
+#include <ncurses.h>
 #include "RelayPi.h"
 #include "TempPi.h"
 
@@ -24,40 +26,44 @@ int relay_3 = 2; // pin 13
 int relay_4 = 3; // pin 15
 std::string sensor1 = "28-00000655b53a";
 
+void buildScreen(int, int);
 /*
  * 
  */
 int main(int argc, char** argv) {
     RelayPi relay;
     TempPi temp;
-    
-    relay.initBrew();
-    cout << "The relay has been activated. Initializing..." << endl;
-    relay.initRelay("Port1", relay_1);
-    relay.initRelay("Port2", relay_2);
-    relay.initRelay("Port3", relay_3);
-    relay.initRelay("Port4", relay_4);
-    relay.updateRelay(relay_1, relay.RELAYPI_ON);
-    delay(500);
-    relay.updateRelay(relay_2, relay.RELAYPI_ON);
-    delay(500);
-    relay.updateRelay(relay_3, relay.RELAYPI_ON);
-    delay(500);
-    relay.updateRelay(relay_4, relay.RELAYPI_ON);
-    delay(500);
-    relay.updateRelay(relay_1, relay.RELAYPI_OFF);
-    delay(500);
-    relay.updateRelay(relay_2, relay.RELAYPI_OFF);
-    delay(500);
-    relay.updateRelay(relay_3, relay.RELAYPI_OFF);
-    delay(500);
-    relay.updateRelay(relay_4, relay.RELAYPI_OFF);
-    delay(500);
+    bool running = true;
+    int count = 0;
+    char mesg[]="Just a string";		/* message to be appeared on the screen */
+    int row,col;				/* to store the number of rows and *
+                                                /* the number of colums of the screen */
+    initscr();                                  /* start the curses mode */
+    getmaxyx(stdscr,row,col);                   /* get the number of rows and columns */
+    //mvprintw(row/2,(col-strlen(mesg))/2,"%s",mesg);
+    buildScreen(row, col);
+    while(running)
+    {
+        mvprintw(LINES - 1, 0, "Frame: %d", count);
+        refresh();
+        delay(250);
+        count++;
+    }
     /**
+    relay.initBrew();
+    relay.initRelay("Port4", relay_4);
+    relay.updateRelay(relay_4, relay.RELAYPI_OFF);
     temp.registerSensor("main_brew", "28-00000655b53a");
     temp.registerSensor("second_brew", "28-00000657dc06");
     temp.readTemp("main_brew");
     temp.readTemp("second_brew");
      * */
+    endwin();
     return 0;
+}
+
+void buildScreen(int rows, int cols)
+{
+    std::string bar = std::string(cols, '=');
+    mvprintw(LINES - 3, 0, "%s", bar);
 }

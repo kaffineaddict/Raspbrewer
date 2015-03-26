@@ -16,8 +16,8 @@
 
 TempPi::TempPi() {
     // Run two system commands to initialize the temperature sensors
-    system("sudo modeprobe w1-gpio");
-    system("sudo modeprobe w1-therm");
+    system("sudo modprobe w1-gpio");
+    system("sudo modprobe w1-therm");
     
     path = "/sys/bus/w1/devices/";
     extension = "/w1_slave";
