@@ -52,7 +52,6 @@ bool RelayPi::initBrew(void) {
  * @param pin The WiringPi number of the pin we want to use.
  */
 void RelayPi::initRelay(std::string name, int pin) {
-    std::cout << "Setting up " << name << " relay on wiringPi pin: " << pin << std::endl;
     pinMode(pin, OUTPUT); // wiringPi pin method to change GPIO state
     relays[name] = pin;
 }
@@ -80,5 +79,16 @@ void RelayPi::updateRelay(int pin, bool state) {
  */
 void RelayPi::updateRelay(std::string name, bool state) {
     int pin = relays[name];
+    relay_state[name] = state;
     return updateRelay(pin, state);
+}
+
+/**
+ * Allows us to activate a relay by name.
+ * 
+ * @param name The assigned name for the relay
+ * @param state The desired state of the relay (RELAYPI_ON, RELAYPI_OFF)
+ */
+std::string RelayPi::getState(std::string name) {
+    return relay_state[name] ? "On" : "Off";
 }

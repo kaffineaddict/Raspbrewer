@@ -13,6 +13,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <iostream>
+#include <ctime>
 #include <string.h>
 #include <ncurses.h>
 #include <pthread.h>
@@ -28,14 +29,15 @@ float main_temp, second_temp;
 std::string input;
 std::string main_sensor = "28-00000655b53a";
 std::string second_sensor = "28-00000657dc06";
+int stage = 0;
 const std::string stages[] = {"Mash", "Lautering", "Boiling", "Done"};
 std::string beer_name = "Cream Ale";
 
-pthread_t temp_thread, print_thread, input_thread;
+pthread_t temp_thread, main_thread, input_thread;
 
 void *updateTemperature(void *);
 void *getInput(void *);
-void *updateScreen(void *);
+void *mainLoop(void *);
 void buildScreen(int, int);
 
 /*
@@ -44,17 +46,8 @@ void buildScreen(int, int);
 int main(int argc, char** argv) {   
     pthread_create( &temp_thread, NULL, updateTemperature, NULL);
     pthread_create( &input_thread, NULL, getInput, NULL);
-    pthread_create( &print_thread, NULL, updateScreen, NULL);
-    pthread_join(print_thread,  NULL);
-    /**
-    relay.initBrew();
-    relay.initRelay("Port4", relay_4);
-    relay.updateRelay(relay_4, relay.RELAYPI_OFF);
-    temp.registerSensor("main_brew", "28-00000655b53a");
-    temp.registerSensor("second_brew", "28-00000657dc06");
-    temp.readTemp("main_brew");
-    temp.readTemp("second_brew");
-     * */
+    pthread_create( &main_thread, NULL, mainLoop, NULL);
+    pthread_join(input_thread,  NULL);
     endwin();
     return 0;
 }
@@ -62,6 +55,7 @@ int main(int argc, char** argv) {
 void buildScreen(int rows, int cols)
 {
     std::string bar = std::string(cols, '=');
+    mvprintw(LINES - 6, 0, "%s", bar.c_str());
     mvprintw(LINES - 3, 0, "%s", bar.c_str());
     mvprintw(LINES - 2, 0, "Brewing: %s", beer_name.c_str());    
 }
@@ -88,18 +82,31 @@ void *getInput(void *ptr)
         if(c == KEY_BACKSPACE)
         {
             input = input.substr(0, input.length() - 1);            
-        } else {
+        } else if(c == 27) {
+            echo();
+            pthread_exit(NULL);
+        }else {
             input += c;
         }
     }
     pthread_exit(NULL);
 }
 
-void *updateScreen(void *ptr)
+void *mainLoop(void *ptr)
 {
+    time_t begin, now;
+    double minutes;
+    begin = time(NULL);
+  
     RelayPi relay;
+    relay.initBrew();
+    relay.initRelay("Pump 1", relay_1);
+    relay.initRelay("Pump 2", relay_2);
+    relay.initRelay("Pump 3", relay_3);
+    relay.initRelay("Pump 4", relay_4);
+    relay.updateRelay("Pump 1", relay.RELAYPI_ON);
+    
     bool running = true;
-    int count = 0;
     
     int row,col;                                 /* to store the number of rows and *
                                                 /* the number of colums of the screen */
@@ -108,11 +115,17 @@ void *updateScreen(void *ptr)
     buildScreen(row, col);
     while(running)
     {   
-        count++;
+        now = time(NULL);
+        minutes = difftime(now,begin) / 60;
         move(1, 0);
         clrtoeol(); 
         mvprintw(1, 0, "Command: %s", input.c_str());
-        mvprintw(LINES - 1, 0, "Frame: %d", count);     
+        mvprintw(LINES - 5, 0, "Relay 1: %s", relay.getState("Pump 1").c_str());
+        mvprintw(LINES - 4, 0, "Relay 2: %s", relay.getState("Pump 2").c_str());
+        mvprintw(LINES - 5, COLS - 12, "Relay 3: %s", relay.getState("Pump 3").c_str());
+        mvprintw(LINES - 4, COLS - 12, "Relay 4: %s", relay.getState("Pump 4").c_str());
+        mvprintw(LINES - 7, 0, "Time: %4.2f", minutes);
+        mvprintw(LINES - 1, 0, "Stage: %s", stages[stage].c_str());     
         mvprintw(LINES - 2, col - 26, "Main Temp: %4.2f", main_temp);
         mvprintw(LINES - 1, col - 26, "Boiler Temp: %4.2f", second_temp);
         refresh();

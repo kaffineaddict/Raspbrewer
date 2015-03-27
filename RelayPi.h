@@ -29,6 +29,7 @@ public:
     void initRelay(std::string, int);
     void updateRelay(int, bool);
     void updateRelay(std::string, bool);
+    std::string getState(std::string);
     
     // static flags for relays
     bool RELAYPI_ON;
@@ -36,6 +37,7 @@ public:
 private:
     // a private list of the relays and a name to access them
     std::map<std::string, int> relays;
+    std::map<std::string, bool> relay_state;
 };
 
 #endif	/* RELAYPI_H */
