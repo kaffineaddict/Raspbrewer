@@ -31,7 +31,6 @@ TempPi::~TempPi() {
 
 void TempPi::registerSensor(std::string name, std::string id) {
     sensors[name] = id;
-    std::cout << "Registration of the sensor " << name << " was successful." << std::endl;
 }
 
 float TempPi::readTemp(std::string name) {

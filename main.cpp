@@ -19,55 +19,33 @@
 #include "RelayPi.h"
 #include "TempPi.h"
 
-using namespace std;
-
 int relay_1 = 0; // pin 11
 int relay_2 = 1; // pin 12
 int relay_3 = 2; // pin 13
 int relay_4 = 3; // pin 15
-std::string sensor1 = "28-00000655b53a";
+
+float main_temp, second_temp;
+std::string input;
+std::string main_sensor = "28-00000655b53a";
+std::string second_sensor = "28-00000657dc06";
+const std::string stages[] = {"Mash", "Lautering", "Boiling", "Done"};
 std::string beer_name = "Cream Ale";
 
-pthread_t t1, t1_id, t2, t2_id;
+pthread_t temp_thread, print_thread, input_thread;
 
-void *testThread(void *);
-void *testThread2(void *);
+void *updateTemperature(void *);
+void *getInput(void *);
+void *updateScreen(void *);
 void buildScreen(int, int);
+
 /*
- * 
+ * The main function to enter the brew loops
  */
-int main(int argc, char** argv) {
-    RelayPi relay;
-    TempPi temp;
-    bool running = true;
-    int count = 0;
-    float main_temp = 0;
-    float next_temp = 0;
-    
-    int row,col;                                 /* to store the number of rows and *
-                                                /* the number of colums of the screen */
-    initscr();                                  /* start the curses mode */
-    getmaxyx(stdscr,row,col);                   /* get the number of rows and columns */
-    
-    temp.registerSensor("main_brew", "28-00000655b53a");
-    temp.registerSensor("next_brew", "28-00000657dc06");
-    
-    pthread_create( &t2, NULL, testThread2, NULL);
-    
-    pthread_create( &t1, NULL, testThread, NULL);
-    
-    buildScreen(row, col);
-    while(running)
-    {   
-        count++;
-        main_temp = temp.readTemp("main_brew");
-        next_temp = temp.readTemp("next_brew");
-        mvprintw(LINES - 1, 0, "Frame: %d", count);     
-        mvprintw(LINES - 2, col - 18, "Main Temp: %4.2f", main_temp);
-        mvprintw(LINES - 1, col - 18, "Next Temp: %4.2f", next_temp);
-        refresh();
-        delay(250);
-    }
+int main(int argc, char** argv) {   
+    pthread_create( &temp_thread, NULL, updateTemperature, NULL);
+    pthread_create( &input_thread, NULL, getInput, NULL);
+    pthread_create( &print_thread, NULL, updateScreen, NULL);
+    pthread_join(print_thread,  NULL);
     /**
     relay.initBrew();
     relay.initRelay("Port4", relay_4);
@@ -84,47 +62,59 @@ int main(int argc, char** argv) {
 void buildScreen(int rows, int cols)
 {
     std::string bar = std::string(cols, '=');
-    mvprintw(LINES - 2, 0, "Brewing: %s", beer_name.c_str());
     mvprintw(LINES - 3, 0, "%s", bar.c_str());
+    mvprintw(LINES - 2, 0, "Brewing: %s", beer_name.c_str());    
 }
 
-void *testThread(void *ptr)
+void *updateTemperature(void *ptr)
 {
-    //t1 =  pthread_self();
+    TempPi temp;
+    temp.registerSensor("main_brew", "28-00000655b53a");
+    temp.registerSensor("boiling_water", "28-00000657dc06");
+    while(1)
+    {
+        main_temp = temp.readTemp("main_brew");
+        second_temp = temp.readTemp("boiling_water");
+    }
+}
+
+void *getInput(void *ptr)
+{
+    noecho();
+    keypad(stdscr, TRUE);
     while(true)
     {
-        char c = getch();
-        mvprintw(1, 0, "You Pressed: %c", c);
+        int c = getch();
+        if(c == KEY_BACKSPACE)
+        {
+            input = input.substr(0, input.length() - 1);            
+        } else {
+            input += c;
+        }
     }
     pthread_exit(NULL);
 }
 
-void *testThread2(void *ptr)
+void *updateScreen(void *ptr)
 {
     RelayPi relay;
-    TempPi temp;
     bool running = true;
     int count = 0;
-    float main_temp = 0;
-    float next_temp = 0;
     
     int row,col;                                 /* to store the number of rows and *
                                                 /* the number of colums of the screen */
     initscr();                                  /* start the curses mode */
-    getmaxyx(stdscr,row,col);                   /* get the number of rows and columns */
-    
-    temp.registerSensor("main_brew", "28-00000655b53a");
-    temp.registerSensor("next_brew", "28-00000657dc06");
-    
+    getmaxyx(stdscr,row,col);                   /* get the number of rows and columns */   
     buildScreen(row, col);
     while(running)
     {   
         count++;
-        main_temp = temp.readTemp("main_brew");
-        next_temp = temp.readTemp("next_brew");
+        move(1, 0);
+        clrtoeol(); 
+        mvprintw(1, 0, "Command: %s", input.c_str());
         mvprintw(LINES - 1, 0, "Frame: %d", count);     
-        mvprintw(LINES - 2, col - 18, "Main Temp: %4.2f", main_temp);
-        mvprintw(LINES - 1, col - 18, "Next Temp: %4.2f", next_temp);
+        mvprintw(LINES - 2, col - 26, "Main Temp: %4.2f", main_temp);
+        mvprintw(LINES - 1, col - 26, "Boiler Temp: %4.2f", second_temp);
         refresh();
         delay(250);
     }
