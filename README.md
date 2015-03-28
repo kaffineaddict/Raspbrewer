@@ -21,7 +21,9 @@ The newer raspian images do not have the correct settings in the config. You mus
 ```shell
 dtoverlay=w1-gpio
 ```
+
 [Wiring the SainSmart](http://theswivelchair.net/2015/03/powering-relays-relay-input/)
+
 [Wiring the Outlet](http://theswivelchair.net/2015/03/powering-relays-relay-output/)
 
 ###Running:
