@@ -22,9 +22,10 @@ This simply means your can use the code and keep your changes private. If you mo
 This project is aimed at any tech savvy individuals who want to get into home brewing or are looking to help others automate their home brewing process. It is NOT intended for commercial purposes as there are much stricter stipulations and regulations in place. This project is available under the Mozilla Public License.
 
 ###Components Used:
- * [http://www.amazon.com/gp/product/B0057OC5O8/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1](SainSmart 4 Channel Relay)
- * [http://www.amazon.com/gp/product/B00EU70ZL8/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1](5- Pack WaterProof Temperature Sensors)
- * [http://www.amazon.com/gp/product/B00E9Z0OCG/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1](Multi-Pack Resistors (a single 4.7k will work))
+ * [SainSmart 4 Channel Relay](http://www.amazon.com/gp/product/B0057OC5O8/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1)
+ * [5- Pack WaterProof Temperature Sensors](http://www.amazon.com/gp/product/B00EU70ZL8/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1)
+ * [Multi-Pack Resistors (a single 4.7k will work)](http://www.amazon.com/gp/product/B00E9Z0OCG/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1)
+ * 
 ###Setup:
 The newer raspian images do not have the correct settings in the config. You must add the following line to your boot config if it is not present.
 ```shell
