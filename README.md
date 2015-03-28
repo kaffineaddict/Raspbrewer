@@ -6,6 +6,9 @@
 ###Overview:
 Raspbrewer is designed to be a simple and easily modified automated home brewery control powered by the Raspberry Pi.
 
+###Demonstration
+[[embed url=https://youtu.be/usqvsCGNW-Y]]
+
 ###Users/Audience:
  * Homebrewers
  * Programers
