@@ -5,7 +5,7 @@
  * Email: blasutto@uat.edu
  *
  * Created on March 9, 2015, 9:07 PM
- * Last Updated: 3/25/2015
+ * Last Updated: 3/27/2015
  */
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -163,16 +163,15 @@ void *mainLoop(void *ptr) {
     relay.initRelay("Pump 3", relay_3);
     relay.initRelay("Pump 4", relay_4);
     
-    // 145-150 would be normal these are for testing
     // Setup the range for mashing
-    mash_range.high = 80;
-    mash_range.low = 75;
-    mash_range.length = 1;
+    mash_range.high = 150;
+    mash_range.low = 145;
+    mash_range.length = 60; // measured in minutes
 
     // Setup the range for boiling
     boil_range.high = boiling + 5;
     boil_range.low = boiling;
-    boil_range.length = 1.5;
+    boil_range.length = 75;
     
     // setup ncurses screen
     initscr();
@@ -204,17 +203,19 @@ void *mainLoop(void *ptr) {
                 break;
             case 3:
                 if(temperatureControl(boil_range)) {
-                    delay(500);
                     status = "Done boiling. Shutting Down";
-                    delay(5000);
+                    delay(2000); // pause shortly
+                    // cleanup the screen
                     echo();
                     pthread_exit(NULL);
                 }
                 break;
             default:
+                // exit the program
                 echo();
                 pthread_exit(NULL);
         }
+        // Cleanup the window a bit.
         move(1, 0);         
         clrtoeol();
         move(LINES - 5, 0);
@@ -224,6 +225,7 @@ void *mainLoop(void *ptr) {
         move(LINES - 1, 0);
         clrtoeol();
         
+        // Print the current values to the screen.
         mvprintw(1, 0, "Status: %s", status.c_str());
         mvprintw(LINES - 5, 0, "Relay 1: %s", relay.getState("Pump 1").c_str());
         mvprintw(LINES - 4, 0, "Relay 2: %s", relay.getState("Pump 2").c_str());
@@ -239,15 +241,26 @@ void *mainLoop(void *ptr) {
     pthread_exit(NULL);
 }
 
+/**
+ * Take a range of temperatures and a length of time and make sure
+ * that we are in that range and we are not running it for to long.
+ * 
+ * @param data A brew_range struct with the min and max temp
+ * @return will return true when the time stage is completed.
+ */
 bool temperatureControl(brew_range data) {   
     now = time(NULL);
     minutes = difftime(now, begin) / 60;
+    
+    // check and make sure we are not to warm
     if (main_temp > data.high) {
         relay.updateRelay("Pump 1", relay.RELAYPI_OFF);
     }
+    // check if we are getting to cold
     if (main_temp < data.low) {
         relay.updateRelay("Pump 1", relay.RELAYPI_ON);
     }
+    // lastly check to make sure we are not running to long
     if (minutes > data.length) {
         relay.updateRelay("Pump 1", relay.RELAYPI_OFF);
         stage++;        
