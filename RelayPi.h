@@ -25,7 +25,6 @@ public:
     RelayPi(const RelayPi& orig);
     virtual ~RelayPi();
     
-    bool initBrew(void);
     void initRelay(std::string, int);
     void updateRelay(int, bool);
     void updateRelay(std::string, bool);

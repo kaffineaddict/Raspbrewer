@@ -32,21 +32,6 @@ RelayPi::~RelayPi() {
 }
 
 /**
- * Starts up the relay module and initializes the Raspberry Pi's GPIO
- * ports for use by the program.
- * 
- * @return True upon successful setup and false upon error.
- */
-bool RelayPi::initBrew(void) {
-    // call the wiring pi setup function
-    if (wiringPiSetup() == -1) {
-        std::cout << "Setup of wiringPi failed !" << std::endl;
-        return true;
-    }
-    return false;
-}
-
-/**
  * Initialize a relay with a human readable name.
  * @param name A string name for the relay that can be used to update it.
  * @param pin The WiringPi number of the pin we want to use.
@@ -54,6 +39,7 @@ bool RelayPi::initBrew(void) {
 void RelayPi::initRelay(std::string name, int pin) {
     pinMode(pin, OUTPUT); // wiringPi pin method to change GPIO state
     relays[name] = pin;
+    digitalWrite(pin, HIGH);
 }
 
 /**
