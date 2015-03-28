@@ -25,7 +25,8 @@ This project is aimed at any tech savvy individuals who want to get into home br
  * [SainSmart 4 Channel Relay](http://www.amazon.com/gp/product/B0057OC5O8/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1)
  * [5- Pack WaterProof Temperature Sensors](http://www.amazon.com/gp/product/B00EU70ZL8/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1)
  * [Multi-Pack Resistors (a single 4.7k will work)](http://www.amazon.com/gp/product/B00E9Z0OCG/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1)
- * 
+ 
+
 ###Setup:
 The newer raspian images do not have the correct settings in the config. You must add the following line to your boot config if it is not present.
 ```shell
