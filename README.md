@@ -6,6 +6,11 @@
 ###Overview:
 Raspbrewer is designed to be a simple and easily modified automated home brewery control powered by the Raspberry Pi.
 
+###License:
+Raspbrewer is licensed under the MPL 2.0 license [Copy Found Here](https://github.com/KaffineAddict/Raspbrewer/blob/master/LICENSE)
+
+This simply means your can use the code and keep your changes private. If you modify the Raspbrewer files you must share the source of those files.
+
 ###Demonstration
 [Demonstration Video](https://youtu.be/usqvsCGNW-Y)
 
