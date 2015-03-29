@@ -33,6 +33,8 @@ The newer raspian images do not have the correct settings in the config. You mus
 dtoverlay=w1-gpio
 ```
 
+You will also have to install WiringPi library. The library is at the bottom but here is a direct link to the install instructions. [HERE](http://wiringpi.com/download-and-install/)
+
 [Wiring the SainSmart](http://theswivelchair.net/2015/03/powering-relays-relay-input/)
 
 [Wiring the Outlet](http://theswivelchair.net/2015/03/powering-relays-relay-output/)
