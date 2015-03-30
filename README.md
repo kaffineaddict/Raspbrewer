@@ -21,6 +21,9 @@ This simply means your can use the code and keep your changes private. If you mo
 
 This project is aimed at any tech savvy individuals who want to get into home brewing or are looking to help others automate their home brewing process. It is NOT intended for commercial purposes as there are much stricter stipulations and regulations in place. This project is available under the Mozilla Public License.
 
+###Benefits and Limitations:
+This system will allow you to brew a batch of beer if you have the components in place as listed in the links and tutorials below. The main limitation is there is no external support for chaning the recipe. At this time you would have to recompile to change temperatures etc. This takes about 30 seconds to compile on the RPi but it is definitely a limitation. An input system will be added in a future version. The main benefit is that this can brew a really nice Cream Ale with only about a 200$ investment.
+
 ###Components Used:
  * [SainSmart 4 Channel Relay](http://www.amazon.com/gp/product/B0057OC5O8/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1)
  * [5- Pack WaterProof Temperature Sensors](http://www.amazon.com/gp/product/B00EU70ZL8/ref=oh_aui_detailpage_o02_s00?ie=UTF8&psc=1)
